@@ -1,0 +1,7 @@
+@import "./base.css";
+@tailwind components;
+@tailwind utilities;
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

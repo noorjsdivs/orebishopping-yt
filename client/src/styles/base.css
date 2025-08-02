@@ -1,0 +1,18 @@
+@tailwind base;
+
+@font-face {
+  font-family: "SUSE";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../fonts/suse.woff2");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 300 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../fonts/open_sans.woff2");
+}
