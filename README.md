@@ -333,4 +333,4 @@ Get the complete source code at: **[Your BuyMeACoffee Link]**
 
 **Built with ❤️ by [Your Name]**
 
-_Need custom modifications or have questions? Contact me at [your-email@example.com]_
+_Need custom modifications or have questions? Contact me at [noor.jsdivs@gmail.com]_
