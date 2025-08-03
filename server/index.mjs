@@ -14,9 +14,6 @@ const allowedOrigins = [
   process.env.ADMIN_URL,
   process.env.CLIENT_URL,
   // Add production URLs
-  "https://orebiclient.reactbd.com",
-  "https://orebiadmin.reactbd.com",
-
   // Add localhost for development
   "http://localhost:5174",
   "http://localhost:5173",
@@ -27,7 +24,6 @@ const allowedOrigins = [
 
 // CORS configuration using config system
 console.log("Allowed CORS Origins:", allowedOrigins);
-console.log("NODE_ENV:", process.env.NODE_ENV);
 
 app.use(
   cors({
