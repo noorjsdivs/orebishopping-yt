@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { logout } from "../redux/authSlice";
-import { serverUrl } from "../../config.js";
 import { IoMdAdd } from "react-icons/io";
 import {
   FaList,
@@ -16,7 +15,6 @@ import {
   FaTags,
   FaBook,
   FaEnvelope,
-  FaSync,
 } from "react-icons/fa";
 import { MdDashboard, MdAnalytics, MdInventory } from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
@@ -28,57 +26,6 @@ const Sidebar = () => {
   const [expandedCategories, setExpandedCategories] = useState({
     Products: false,
   });
-  const [quickStats, setQuickStats] = useState({
-    todaysSales: 0,
-    todaysOrders: 0,
-    loading: true,
-    error: false,
-    lastUpdated: null,
-  });
-
-  // Fetch quick stats
-  const fetchQuickStats = async () => {
-    try {
-      setQuickStats((prev) => ({ ...prev, loading: true, error: false }));
-
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setQuickStats((prev) => ({ ...prev, loading: false, error: true }));
-        return;
-      }
-
-      const response = await fetch(`${serverUrl}/api/dashboard/quick-stats`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setQuickStats({
-          todaysSales: data.quickStats.todaysSales,
-          todaysOrders: data.quickStats.todaysOrders,
-          loading: false,
-          error: false,
-          lastUpdated: new Date(),
-        });
-      } else {
-        setQuickStats((prev) => ({ ...prev, loading: false, error: true }));
-      }
-    } catch (error) {
-      console.error("Error fetching quick stats:", error);
-      setQuickStats((prev) => ({ ...prev, loading: false, error: true }));
-    }
-  };
-
-  useEffect(() => {
-    fetchQuickStats();
-
-    // Auto-refresh every 5 minutes
-    const interval = setInterval(fetchQuickStats, 5 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const toggleCategory = (categoryName) => {
     setExpandedCategories((prev) => ({
@@ -91,16 +38,6 @@ const Sidebar = () => {
     dispatch(logout());
     toast.success("Logged out successfully");
     navigate("/login");
-  };
-
-  // Format currency
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
   };
 
   const sidebarItems = [
@@ -285,59 +222,6 @@ const Sidebar = () => {
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Quick Stats */}
-      <div className="p-3 sm:p-4 border-b border-gray-100 hidden lg:block flex-shrink-0">
-        <div className="flex items-center justify-between mb-2">
-          <div className="text-xs text-gray-500">Quick Overview</div>
-          <button
-            onClick={fetchQuickStats}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-            title="Refresh data"
-          >
-            <FaSync className="w-3 h-3" />
-          </button>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="bg-blue-50 p-2 rounded-lg">
-            <div className="text-xs text-blue-600 font-medium">
-              Today&apos;s Sales
-            </div>
-            <div className="text-sm font-bold text-blue-800">
-              {quickStats.loading ? (
-                <div className="animate-pulse bg-blue-200 h-4 w-12 rounded"></div>
-              ) : quickStats.error ? (
-                <span className="text-red-500">--</span>
-              ) : (
-                formatCurrency(quickStats.todaysSales)
-              )}
-            </div>
-          </div>
-          <div className="bg-green-50 p-2 rounded-lg">
-            <div className="text-xs text-green-600 font-medium">New Orders</div>
-            <div className="text-sm font-bold text-green-800">
-              {quickStats.loading ? (
-                <div className="animate-pulse bg-green-200 h-4 w-8 rounded"></div>
-              ) : quickStats.error ? (
-                <span className="text-red-500">--</span>
-              ) : (
-                quickStats.todaysOrders
-              )}
-            </div>
-          </div>
-        </div>
-        {quickStats.lastUpdated && !quickStats.loading && (
-          <div className="text-center mt-2">
-            <span className="text-xs text-gray-400">
-              Updated:{" "}
-              {quickStats.lastUpdated.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Navigation */}

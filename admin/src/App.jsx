@@ -35,6 +35,23 @@ function App() {
           element={
             <ProtectedRoute>
               <div className="min-h-screen">
+                {/* Premium Support Badge */}
+                <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2 px-4 text-center text-sm font-medium shadow-sm">
+                  <div className="flex items-center justify-center gap-2 flex-wrap">
+                    <span>💖</span>
+                    <span>
+                      Support this project & get the premium source code!
+                    </span>
+                    <a
+                      href="https://buymeacoffee.com/reactbd"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full transition-colors duration-200 text-xs font-semibold"
+                    >
+                      ☕ Buy Me a Coffee
+                    </a>
+                  </div>
+                </div>
                 <Navbar />
                 <div className="flex w-full">
                   <div className="w-16 sm:w-64 lg:w-72 fixed min-h-screen border-r-2 z-10">
