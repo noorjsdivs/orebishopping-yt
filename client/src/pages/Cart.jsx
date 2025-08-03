@@ -741,7 +741,7 @@ const Cart = () => {
           >
             <div className="max-w-md mx-auto">
               <img
-                className="w-32 h-32 mx-auto mb-6 opacity-50"
+                className="w-32 h-32 mx-auto mb-6 object-cover"
                 src={emptyCart}
                 alt="Empty Cart"
               />

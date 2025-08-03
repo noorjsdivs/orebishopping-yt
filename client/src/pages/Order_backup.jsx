@@ -9,6 +9,7 @@ import { addToCart, setOrderCount } from "../redux/orebiSlice";
 import toast from "react-hot-toast";
 import {
   FaShoppingBag,
+  FaMapMarkerAlt,
   FaEye,
   FaCreditCard,
   FaMoneyBillWave,
@@ -17,6 +18,9 @@ import {
   FaTruck,
   FaBox,
   FaTimes,
+  FaUser,
+  FaEnvelope,
+  FaPhone,
   FaSort,
   FaSortUp,
   FaSortDown,
@@ -104,7 +108,7 @@ const Order = () => {
     return sortableOrders;
   }, [orders, sortConfig]);
 
-  const openOrderModal = () => {
+  const openOrderModal = (order) => {
     // Show premium modal instead of order details
     setIsPremiumModalOpen(true);
   };
@@ -595,6 +599,228 @@ const Order = () => {
           title="Order Details"
           description="Access to order details and management features is available in the premium version of this code."
         />
+
+        {/* Add to Cart Confirmation Modal */}
+
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                className="bg-white rounded-lg max-w-4xl max-h-[90vh] overflow-y-auto w-full"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Header */}
+                <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      Order Details
+                    </h2>
+                    <p className="text-gray-600">
+                      Order #{selectedOrder._id.slice(-8).toUpperCase()}
+                    </p>
+                  </div>
+                  <button
+                    onClick={closeOrderModal}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <FaTimes className="w-5 h-5 text-gray-500" />
+                  </button>
+                </div>
+
+                {/* Modal Content */}
+                <div className="p-6 space-y-6">
+                  {/* Order Info */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Order Information
+                      </h3>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Order Date:</span>
+                          <span className="font-medium">
+                            {new Date(selectedOrder.date).toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Total Amount:</span>
+                          <span className="font-bold text-lg">
+                            <PriceFormat amount={selectedOrder.amount} />
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Payment Method:</span>
+                          <span className="font-medium capitalize">
+                            {selectedOrder.paymentMethod}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Status:</span>
+                          <span
+                            className={`inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(
+                              selectedOrder.status
+                            )}`}
+                          >
+                            {getStatusIcon(selectedOrder.status)}
+                            {selectedOrder.status.charAt(0).toUpperCase() +
+                              selectedOrder.status.slice(1)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Payment Status:</span>
+                          <span
+                            className={`inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-medium border ${getPaymentStatusColor(
+                              selectedOrder.paymentStatus
+                            )}`}
+                          >
+                            {selectedOrder.paymentMethod === "cod" ? (
+                              <FaMoneyBillWave className="w-3 h-3" />
+                            ) : (
+                              <FaCreditCard className="w-3 h-3" />
+                            )}
+                            {selectedOrder.paymentStatus
+                              .charAt(0)
+                              .toUpperCase() +
+                              selectedOrder.paymentStatus.slice(1)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Delivery Address */}
+                    {selectedOrder.address && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                          <FaMapMarkerAlt className="w-5 h-5" />
+                          Delivery Address
+                        </h3>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center gap-2">
+                            <FaUser className="w-4 h-4 text-gray-500" />
+                            <span>
+                              {selectedOrder.address.firstName}{" "}
+                              {selectedOrder.address.lastName}
+                            </span>
+                          </div>
+                          {selectedOrder.address.email && (
+                            <div className="flex items-center gap-2">
+                              <FaEnvelope className="w-4 h-4 text-gray-500" />
+                              <span>{selectedOrder.address.email}</span>
+                            </div>
+                          )}
+                          {selectedOrder.address.phone && (
+                            <div className="flex items-center gap-2">
+                              <FaPhone className="w-4 h-4 text-gray-500" />
+                              <span>{selectedOrder.address.phone}</span>
+                            </div>
+                          )}
+                          <div className="flex items-start gap-2">
+                            <FaMapMarkerAlt className="w-4 h-4 text-gray-500 mt-0.5" />
+                            <div>
+                              <p>{selectedOrder.address.street}</p>
+                              <p>
+                                {selectedOrder.address.city},{" "}
+                                {selectedOrder.address.state}{" "}
+                                {selectedOrder.address.zipcode}
+                              </p>
+                              <p>{selectedOrder.address.country}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Order Items */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Order Items
+                    </h3>
+                    <div className="border border-gray-200 rounded-lg overflow-hidden">
+                      {selectedOrder.items.map((item, index) => (
+                        <div
+                          key={index}
+                          className={`p-4 flex items-center space-x-4 ${
+                            index > 0 ? "border-t border-gray-200" : ""
+                          }`}
+                        >
+                          <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                            {item.image && (
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-medium text-gray-900">
+                              {item.name}
+                            </h4>
+                            <p className="text-sm text-gray-600">
+                              Quantity: {item.quantity}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Unit Price: <PriceFormat amount={item.price} />
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-semibold text-gray-900">
+                              <PriceFormat
+                                amount={item.price * item.quantity}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modal Footer */}
+                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+                  <div className="text-lg font-bold text-gray-900">
+                    Total: <PriceFormat amount={selectedOrder.amount} />
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={closeOrderModal}
+                      className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        handleAddOrderToCart(selectedOrder, e);
+                        closeOrderModal();
+                      }}
+                      className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center gap-2"
+                    >
+                      <FaShoppingCart className="w-4 h-4" />
+                      Add to Cart
+                    </button>
+                    <Link
+                      to={`/checkout/${selectedOrder._id}`}
+                      className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors"
+                      onClick={closeOrderModal}
+                    >
+                      View Full Details
+                    </Link>
+                    {selectedOrder.paymentStatus === "pending" && (
+                      <Link
+                        to={`/checkout/${selectedOrder._id}`}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        onClick={closeOrderModal}
+                      >
+                        Pay Now
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Add to Cart Confirmation Modal */}
         <AnimatePresence>
