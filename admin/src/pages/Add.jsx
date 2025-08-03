@@ -42,8 +42,8 @@ const Add = ({ token }) => {
     try {
       setLoadingData(true);
       const [categoriesRes, brandsRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/category`),
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/brand`),
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category`),
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/brand`),
       ]);
 
       const categoriesData = await categoriesRes.json();
@@ -168,8 +168,7 @@ const Add = ({ token }) => {
 
       const response = await axios.post(serverUrl + "/api/product/add", data, {
         headers: {
-          token,
-          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
 

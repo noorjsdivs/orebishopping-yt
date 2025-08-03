@@ -80,8 +80,8 @@ const List = ({ token }) => {
   const fetchCategoriesAndBrands = async () => {
     try {
       const [categoriesRes, brandsRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/category`),
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/brand`),
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category`),
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/brand`),
       ]);
 
       const categoriesData = await categoriesRes.json();

@@ -104,8 +104,10 @@ const Categories = () => {
       }
 
       const url = editingCategory
-        ? `${import.meta.env.VITE_BACKEND_URL}/category/${editingCategory._id}`
-        : `${import.meta.env.VITE_BACKEND_URL}/category`;
+        ? `${import.meta.env.VITE_BACKEND_URL}/api/category/${
+            editingCategory._id
+          }`
+        : `${import.meta.env.VITE_BACKEND_URL}/api/category`;
 
       const response = await fetch(url, {
         method: editingCategory ? "PUT" : "POST",
