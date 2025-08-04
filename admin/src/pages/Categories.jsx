@@ -34,9 +34,7 @@ const Categories = () => {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/category`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       const data = await response.json();
