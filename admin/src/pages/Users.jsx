@@ -45,7 +45,9 @@ const Users = ({ token }) => {
         // If no localStorage data, fetch from server
         try {
           const response = await axios.get(serverUrl + "/api/user/profile", {
-            headers: { token },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
 
           if (response.data.success) {
@@ -70,7 +72,7 @@ const Users = ({ token }) => {
       setLoading(true);
 
       const response = await axios.get(serverUrl + "/api/user/users", {
-        headers: { token },
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = response?.data;
 
